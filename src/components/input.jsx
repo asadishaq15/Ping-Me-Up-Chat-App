@@ -61,7 +61,7 @@ const Input = () => {
         }),
       });
     }
-    console.log("Documents updated.");
+    console.log("Documents updated successfully!");
 
     await updateDoc(doc(db, "userChats", currentUser.uid), {
       [data.chatId + ".lastMessage"]: {
@@ -105,7 +105,7 @@ const Input = () => {
   useEffect(() => {
     // Add click event listener to close the emoji picker when clicking anywhere on the document
     document.addEventListener('click', (e) => {
-      console.log('Document Clicked');
+      
       closeEmojiPicker(e);
     });
   
