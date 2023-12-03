@@ -122,7 +122,7 @@ const Input = () => {
     <div className="input" onClick={(e) => e.stopPropagation()}>
       <input
         type="text"
-        placeholder="Type something..."
+        placeholder="Type something"
         onChange={(e) => {
           console.log('Input Change:', e.target.value);
           setText(e.target.value);
