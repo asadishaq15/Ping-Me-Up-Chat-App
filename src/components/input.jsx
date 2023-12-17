@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import { ChatContext } from '../context/chatContext';
 import { Timestamp, arrayUnion, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
@@ -8,6 +8,9 @@ import { db, storage } from '../firebaseConfig';
 import Attach from "../assets/attach.png";
 import Img from "../assets/img.png";
 import EmojiPicker from 'emoji-picker-react';
+import ImageIcon from '@mui/icons-material/Image';
+import SendIcon from '@mui/icons-material/Send';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 
 const Input = () => {
   const [text, setText] = useState("");
@@ -16,6 +19,9 @@ const Input = () => {
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
+  const [showEmoji,setShowEmoji]=useState();
+  const [cursorPosition, setCursorPosition] = useState(0);
+  const inputRef=useRef();
 
 const handleSend = async () => {
   console.log("Handling send...");
@@ -75,38 +81,27 @@ const handleSend = async () => {
 };
   
 
-
-
-  const handleEmojiSelect = (emoji) => {
-    // Set the chosen emoji when selected from the picker
-    const emojiRepresentation = emoji.emoji;
-  
-    // Update the text state by appending the selected emoji
+ const handleEmojiSelect = (emoji) => {
+    const emojiRepresentation = emoji.native;
     setText((prevText) => prevText + emojiRepresentation);
-  
-    // Close the emoji picker after selecting
     setShowEmojiPicker(false);
   };
+
 
   const closeEmojiPicker = () => {
     setShowEmojiPicker(false);
   };
 
-
   useEffect(() => {
     // Add click event listener to close the emoji picker when clicking anywhere on the document
-    document.addEventListener('click', (e) => {
-      
-      closeEmojiPicker(e);
-    });
-  
+    document.addEventListener('click', closeEmojiPicker);
+
     // Clean up the event listener when the component unmounts
     return () => {
-      console.log('Event Listener Removed');
       document.removeEventListener('click', closeEmojiPicker);
     };
   }, []);
-  
+
 
 
   return (
@@ -120,7 +115,11 @@ const handleSend = async () => {
         }}
         value={text}
       />
+   
       <div className="send">
+         <button onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
+          <EmojiEmotionsIcon />
+        </button>
         <img src={Attach} alt="" />
         <input
           type="file"
@@ -128,15 +127,28 @@ const handleSend = async () => {
           id="file"
           onChange={(e) => setImg(e.target.files && e.target.files[0])}
         />
+           
         <label htmlFor="file">
-          <img src={Img} alt="" />
+         <ImageIcon/>
         </label>
-        <button onClick={() => setShowEmojiPicker(!showEmojiPicker)}>Emoji</button>
-        <button onClick={handleSend}>Send</button>
+       
+        <button onClick={handleSend}><SendIcon/></button>
+
       </div>
       {showEmojiPicker && (
   <div className="emoji-picker-container">
-    <EmojiPicker onSelect={handleEmojiSelect} />
+    <EmojiPicker pickEmoji={handleEmojiSelect}
+    searchPlaceHolder='How do you feel'
+    emojiStyle='apple'
+    theme='dark'
+    previewConfig={
+      {
+        showPreview:true,
+        defaultEmoji:"1f92a"
+        
+      }
+    }
+    />
   </div>
 )}
     </div>
