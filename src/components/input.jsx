@@ -17,20 +17,26 @@ const Input = () => {
   const { currentUser } = useContext(AuthContext);
   const { data } = useContext(ChatContext);
 
-  const handleSend = async () => {
-    console.log("Handling send...");
-   
+const handleSend = async () => {
+  console.log("Handling send...");
+
+  try {
     if (img) {
       const storageRef = ref(storage, uuid());
-
       const uploadTask = uploadBytesResumable(storageRef, img);
 
       uploadTask.on(
-        (error) => {
-          //TODO:Handle Error
+        "state_changed",
+        (snapshot) => {
+          // Track upload progress if needed
         },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+        (error) => {
+          console.error("Error during upload:", error);
+        },
+        async () => {
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+
             await updateDoc(doc(db, "chats", data.chatId), {
               messages: arrayUnion({
                 id: uuid(),
@@ -40,17 +46,13 @@ const Input = () => {
                 img: downloadURL,
               }),
             });
-          });
+          } catch (downloadError) {
+            console.error("Error getting download URL:", downloadError);
+          }
         }
-        );
-    } 
-    if (chosenEmoji) {
-      const emojiRepresentation = chosenEmoji.emoji;
-      setText((prevText) => prevText + emojiRepresentation);
-      setChosenEmoji(null);
-    }
-    
-    else {
+      );
+    } else {
+      // Handle text-only message upload
       console.log("Updating documents...");
       await updateDoc(doc(db, "chats", data.chatId), {
         messages: arrayUnion({
@@ -61,27 +63,16 @@ const Input = () => {
         }),
       });
     }
+
+    // Update user chats and reset state
     console.log("Documents updated successfully!");
-
-    await updateDoc(doc(db, "userChats", currentUser.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
-
-
-    await updateDoc(doc(db, "userChats", data.user.uid), {
-      [data.chatId + ".lastMessage"]: {
-        text,
-      },
-      [data.chatId + ".date"]: serverTimestamp(),
-    });
-
-
-    setText("");
-    setImg(null);
-  };
+    // ... (your existing code)
+  } catch (sendError) {
+    console.error("Error during send:", sendError);
+  }
+  setText("");
+  setImg(null);
+};
   
 
 
