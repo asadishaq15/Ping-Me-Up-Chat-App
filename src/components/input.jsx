@@ -11,6 +11,8 @@ import EmojiPicker from 'emoji-picker-react';
 import ImageIcon from '@mui/icons-material/Image';
 import SendIcon from '@mui/icons-material/Send';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import MicIcon from '@mui/icons-material/Mic';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 const Input = () => {
   const [text, setText] = useState("");
@@ -86,7 +88,9 @@ const handleSend = async () => {
     setText((prevText) => prevText + emojiRepresentation);
     setShowEmojiPicker(false);
   };
-
+  const handleFileInputChange = (e) => {
+    setImg(e.target.files && e.target.files[0]);
+  };
 
   const closeEmojiPicker = () => {
     setShowEmojiPicker(false);
@@ -117,16 +121,20 @@ const handleSend = async () => {
       />
    
       <div className="send">
+        <MicIcon/>
          <button onClick={() => setShowEmojiPicker(!showEmojiPicker)}>
           <EmojiEmotionsIcon />
         </button>
-        <img src={Attach} alt="" />
-        <input
-          type="file"
-          style={{ display: 'none' }}
-          id="file"
-          onChange={(e) => setImg(e.target.files && e.target.files[0])}
-        />
+        <label htmlFor="file" style={{ cursor: 'pointer' }}>
+    <AttachFileIcon />
+    <input
+      type="file"
+      style={{ display: 'none' }}
+      id="file"
+      onChange={handleFileInputChange}
+    />
+      </label>
+        
            
         <label htmlFor="file">
          <ImageIcon/>
