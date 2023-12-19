@@ -90,7 +90,7 @@ width: 32px;
 }
 
 .home{
-  background-color: #a7bcff;
+  background-color: #e0e0e0;
   height: 100vh;
   display: flex;
   align-items: center;
@@ -219,7 +219,7 @@ background-color: #2f2d52;
       }
     }
     .messages{
-      background-color: rgba(217, 250, 215, 0.413);
+      background-color: rgba(222, 221, 221, 0.897);
       height: calc(100% - 140px);
       padding: 20px;
       overflow: scroll;
@@ -273,53 +273,54 @@ background-color: #2f2d52;
         }
       }
     }
-    .input{
+    .input {
       height: 45px;
-      max-width:100%;
+      max-width: 100%;
       margin-bottom: 30%;
       background-color: white;
-
       display: flex;
       align-items: center;
       justify-content: space-between;
-   
-      input{
+    
+      input {
         widows: 100%;
         border: none;
         outline: none;
-        
         color: #2f2d52;
         font-size: 18px;
-        &::placeholder{
-          color:lightgray
-
+    
+        &::placeholder {
+          color: lightgray;
         }
-
       }
-      .send{
+    
+      .send {
         display: flex;
         align-items: center;
         gap: 10px;
       }
-      img{
+    
+      img {
         height: 24px;
         cursor: pointer;
       }
-      button{
-        border:none;
+    
+      button {
+        border: none;
         padding: 10px 15px;
         color: white;
-        background-color:#2e4caf ;
+        background-color: #2e4caf;
       }
+    
       .emoji-picker-container {
         position: absolute;
-        top: 50%;
+        top: 50%; /* Adjust the top position as needed */
         left: 50%;
         transform: translate(-50%, -50%);
-        z-index: 1000; // Adjust the z-index as needed
+        z-index: 1000; /* Adjust the z-index as needed */
       }
-
     }
+    
     }
   }
 }

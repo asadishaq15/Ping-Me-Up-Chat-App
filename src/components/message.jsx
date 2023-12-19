@@ -21,24 +21,17 @@ const Message = ({ message }) => {
   const handleReaction = (emoji) => {
     // Update the reactions state
     setReactions((prevReactions) => [...prevReactions, emoji]);
-  
-    // TODO: Implement logic to update reactions in the database
-    // You might need to call an API or use a database service.
+
   };
   
 
   const handleEmojiSelect = (emoji) => {
-    // Append the selected emoji to the message text
-    // TODO: Update the logic based on your message structure
+
     const updatedMessage = {
       ...message,
       text: (message.text || '') + emoji.native,
     };
-  
-    // TODO: Implement logic to update the message in the database
-    // You might need to call an API or use a database service.
-  
-    // Close the emoji picker after selecting
+
     setShowEmojiPicker(false);
   };
   
@@ -63,12 +56,11 @@ const Message = ({ message }) => {
         <p>{message.text}</p>
         {message.img && <img src={message.img} alt="" />}
       </div>
-      <div className="reactions">
-        {/* Example reaction buttons, you can customize as needed */}
+      {/* <div className="reactions">
         <button onClick={() => handleReaction('👍')}>👍</button>
         <button onClick={() => handleReaction('❤️')}>❤️</button>
         <button onClick={() => setShowEmojiPicker(true)}>😊</button>
-      </div>
+      </div> */}
       {showEmojiPicker && (
         <Picker onSelect={handleEmojiSelect} />
       )}
